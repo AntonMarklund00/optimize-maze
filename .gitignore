@@ -17,3 +17,6 @@ buildNumber.properties
 .classpath
 .idea
 pom.xml
+/target/
+/.idea/
+/src/test/
