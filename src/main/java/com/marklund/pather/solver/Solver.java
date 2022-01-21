@@ -11,6 +11,10 @@ public abstract class Solver <T>{
     protected T end;
     protected T[] prev;
 
+    public Solver(GenerateMaze maze) {
+        this.maze = maze;
+    }
+
     abstract void solve();
 
     abstract List<T> getSolution();

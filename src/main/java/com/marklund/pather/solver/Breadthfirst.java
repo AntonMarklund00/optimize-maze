@@ -5,13 +5,9 @@ import com.marklund.pather.maze.GenerateMaze;
 import java.util.*;
 
 public class Breadthfirst extends Solver<Node> {
-    private GenerateMaze maze;
-    private Node start;
-    private Node end;
-    private Node[] prev;
 
     public Breadthfirst(GenerateMaze maze){
-        this.maze = maze;
+        super(maze);
     }
 
     @Override
