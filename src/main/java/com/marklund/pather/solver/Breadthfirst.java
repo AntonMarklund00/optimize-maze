@@ -4,7 +4,7 @@ import com.marklund.pather.dao.Node;
 import com.marklund.pather.maze.GenerateMaze;
 import java.util.*;
 
-public class Breadthfirst {
+public class Breadthfirst extends Solver<Node> {
     private GenerateMaze maze;
     private Node start;
     private Node end;
@@ -14,6 +14,7 @@ public class Breadthfirst {
         this.maze = maze;
     }
 
+    @Override
     public void solve(){
         start = maze.getStart();
         end = maze.getEnd();
@@ -57,6 +58,7 @@ public class Breadthfirst {
         }
     }
 
+    @Override
     public List<Node> getSolution(){
         ArrayList<Node> solution = new ArrayList<>();
         Node current = end;
