@@ -1,2 +1,8 @@
 # Maze solving
-Idea from [This Project](https://github.com/mikepound/mazesolving)
+> Idea and inspiration from [THIS PROJECT](https://github.com/mikepound/mazesolving) by Mike Pound 
+
+## Maze nodes
+<img src="_Resources/assets/nodes.png">
+
+## Maze solution
+<img src="_Resources/assets/solution.png">
