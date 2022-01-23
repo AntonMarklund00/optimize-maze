@@ -5,6 +5,7 @@ public class Node {
     private int x;
     private Node[] neighbors;
     private int distance;
+    private int heuristic;
 
     public Node(int y, int x) {
         this.y = y;
@@ -42,5 +43,13 @@ public class Node {
 
     public void setDistance(int distance) {
         this.distance = distance;
+    }
+
+    public int getHeuristic() {
+        return heuristic;
+    }
+
+    public void setHeuristic(int heuristic) {
+        this.heuristic = heuristic;
     }
 }
