@@ -16,7 +16,7 @@ public class Main {
 
         // Generate a maze
         long startTimeMakeMaze = System.currentTimeMillis();
-        BufferedImage image = fileHandler.readImage("super-big-maze.png");
+        BufferedImage image = fileHandler.readImage("maze.png");
         maze.makeMaze(image);
         long endTimeMakeMaze = System.currentTimeMillis();
         System.out.println("Time to make maze: " + (endTimeMakeMaze - startTimeMakeMaze) + "ms");
@@ -37,7 +37,7 @@ public class Main {
         // make matrix maze
         long startTimeMakeMatrixMaze = System.currentTimeMillis();
         MakeMazeMatrix matrixMaze = new MakeMazeMatrix();
-        Integer[][] matrix = matrixMaze.makeMaze(fileHandler.readImage("super-big-maze.png"));
+        Integer[][] matrix = matrixMaze.makeMaze(fileHandler.readImage("maze.png"));
         long endTimeMakeMatrixMaze = System.currentTimeMillis();
         System.out.println("Time to make matrix maze: " + (endTimeMakeMatrixMaze - startTimeMakeMatrixMaze) + "ms");
 
