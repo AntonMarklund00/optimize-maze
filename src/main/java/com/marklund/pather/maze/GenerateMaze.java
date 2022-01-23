@@ -5,6 +5,7 @@ import com.marklund.pather.support.FileHandler;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 import java.util.function.BiFunction;
 
 public class GenerateMaze extends MazeMaker<Node, Node>{
@@ -14,11 +15,6 @@ public class GenerateMaze extends MazeMaker<Node, Node>{
     private int height;
     private Node start;
     private Node end;
-
-    private void drawInMaze(int y, int x){
-        Color color = new Color(0, 100, 200);
-        image.setRGB(x, y, color.getRGB());
-    }
 
     private boolean[] makeIntMatrix(BufferedImage image){
         boolean[] matrix = new boolean[image.getHeight() * image.getWidth()];
@@ -34,7 +30,6 @@ public class GenerateMaze extends MazeMaker<Node, Node>{
 
     @Override
     public Node makeMaze(BufferedImage image) {
-        BufferedImage imageCopy = new BufferedImage(image.getColorModel(), image.copyData(null), image.isAlphaPremultiplied(), null);
         this.image = image;
 
         width = image.getWidth();
@@ -45,15 +40,14 @@ public class GenerateMaze extends MazeMaker<Node, Node>{
 
         int count = 0;
 
-
         for (int x = 1; x < width-1; x++) {
             if (rowData[x]) {
                 start = new Node(0, x);
                 topNodes[x] = start;
                 count++;
-                FileHandler.INSTANCE.drawInMaze(imageCopy, x, 0, 0);
             }
         }
+
 
         for(int y = 1; y < height-1; y++){
 
@@ -114,23 +108,23 @@ public class GenerateMaze extends MazeMaker<Node, Node>{
                         topNodes[x] = null;
 
                     count++;
-                    FileHandler.INSTANCE.drawInMaze(imageCopy, x, y, 0);
                 }
             }
         }
-        int rowoffset = (height - 1) * width;
+
+
+
+        int rowOffset = (height - 1) * width;
         for (int x = 0; x < width; x++) {
-            if (rowData[rowoffset+x]) {
+            if (rowData[rowOffset+x]) {
                 end = new Node(height - 1, x);
                 Node temp = topNodes[x];
                 temp.setNeighbors(2, end);
                 end.setNeighbors(0, temp);
-                FileHandler.INSTANCE.drawInMaze(imageCopy, x, end.getY(), 0);
                 count++;
                 break;
             }
         }
-        FileHandler.INSTANCE.saveImage(imageCopy, "mazeNode.png");
 
         return start;
     }

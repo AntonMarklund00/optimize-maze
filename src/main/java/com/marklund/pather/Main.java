@@ -15,8 +15,8 @@ public class Main {
         FileHandler fileHandler = FileHandler.INSTANCE;
 
         // Generate a maze
-        long startTimeMakeMaze = System.currentTimeMillis();
         BufferedImage image = fileHandler.readImage("maze.png");
+        long startTimeMakeMaze = System.currentTimeMillis();
         maze.makeMaze(image);
         long endTimeMakeMaze = System.currentTimeMillis();
         System.out.println("Time to make maze: " + (endTimeMakeMaze - startTimeMakeMaze) + "ms");

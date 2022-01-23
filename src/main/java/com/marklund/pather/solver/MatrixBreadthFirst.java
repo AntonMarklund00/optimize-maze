@@ -35,7 +35,7 @@ public class MatrixBreadthFirst extends Solver<Integer[]> {
             count++;
 
             if (Objects.equals(current[0], end[0]) && Objects.equals(current[1], end[1])) {
-                System.out.println("Found End in " + count + "steps");
+                System.out.println("Found End in " + count + " steps");
                 break;
             }
 
