@@ -2,6 +2,8 @@ package com.marklund.pather.solver;
 
 import com.marklund.pather.dao.Node;
 import com.marklund.pather.maze.GenerateMaze;
+import com.marklund.pather.maze.MakeMazeMatrix;
+
 import java.util.*;
 
 public class Breadthfirst extends Solver<Node> {
@@ -12,8 +14,8 @@ public class Breadthfirst extends Solver<Node> {
 
     @Override
     public void solve(){
-        start = maze.getStart();
-        end = maze.getEnd();
+        start = (Node) maze.getStart();
+        end = (Node) maze.getEnd();
         int width = maze.getWidth();
 
         Queue<Node> queue = new LinkedList();

@@ -1,8 +1,12 @@
 package com.marklund.pather;
 
 import com.marklund.pather.maze.GenerateMaze;
+import com.marklund.pather.maze.MakeMazeMatrix;
 import com.marklund.pather.solver.Breadthfirst;
+import com.marklund.pather.solver.MatrixBreadthFirst;
 import com.marklund.pather.support.FileHandler;
+
+import java.awt.image.BufferedImage;
 
 
 public class Main {
@@ -12,7 +16,8 @@ public class Main {
 
         // Generate a maze
         long startTimeMakeMaze = System.currentTimeMillis();
-        maze.makeMaze(fileHandler.readImage("big-maze.png"));
+        BufferedImage image = fileHandler.readImage("super-big-maze.png");
+        maze.makeMaze(image);
         long endTimeMakeMaze = System.currentTimeMillis();
         System.out.println("Time to make maze: " + (endTimeMakeMaze - startTimeMakeMaze) + "ms");
 
@@ -25,6 +30,21 @@ public class Main {
         System.out.println("Time to solve maze: " + (endTimeSolveMaze - startTimeSolveMaze) + "ms");
 
         // draw the maze
-        FileHandler.INSTANCE.drawSolution(maze.getImage(), solver.getSolution());
+        FileHandler.INSTANCE.drawSolution(image, solver.getSolution());
+
+        System.out.println("---".repeat(20));
+
+        // make matrix maze
+        long startTimeMakeMatrixMaze = System.currentTimeMillis();
+        MakeMazeMatrix matrixMaze = new MakeMazeMatrix();
+        Integer[][] matrix = matrixMaze.makeMaze(fileHandler.readImage("super-big-maze.png"));
+        long endTimeMakeMatrixMaze = System.currentTimeMillis();
+        System.out.println("Time to make matrix maze: " + (endTimeMakeMatrixMaze - startTimeMakeMatrixMaze) + "ms");
+
+        MatrixBreadthFirst matrixSolver = new MatrixBreadthFirst(matrixMaze, matrix);
+        long startTimeSolveMatrixMaze = System.currentTimeMillis();
+        matrixSolver.solve();
+        long endTimeSolveMatrixMaze = System.currentTimeMillis();
+        System.out.println("Time to solve matrix maze: " + (endTimeSolveMatrixMaze - startTimeSolveMatrixMaze) + "ms");
     }
 }

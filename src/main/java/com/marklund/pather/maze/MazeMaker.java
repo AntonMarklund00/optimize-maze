@@ -4,9 +4,16 @@ import com.marklund.pather.dao.Node;
 
 import java.awt.image.BufferedImage;
 
-public abstract class MazeMaker {
+public abstract class MazeMaker <T, E>{
     protected final ColorTester colorTester = ColorTester.INSTANCE;
 
-    public abstract Node makeMaze(BufferedImage image);
+    public abstract T makeMaze(BufferedImage image);
+
+    public abstract E getStart();
+    public abstract E getEnd();
+    public abstract int getWidth();
+    public abstract int getHeight();
+    public abstract BufferedImage getImage();
+
 
 }

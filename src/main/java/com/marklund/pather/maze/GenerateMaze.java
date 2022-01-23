@@ -7,7 +7,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.function.BiFunction;
 
-public class GenerateMaze extends MazeMaker {
+public class GenerateMaze extends MazeMaker<Node, Node>{
 
     private BufferedImage image;
     private int width;
@@ -34,6 +34,7 @@ public class GenerateMaze extends MazeMaker {
 
     @Override
     public Node makeMaze(BufferedImage image) {
+        BufferedImage imageCopy = new BufferedImage(image.getColorModel(), image.copyData(null), image.isAlphaPremultiplied(), null);
         this.image = image;
 
         width = image.getWidth();
@@ -50,7 +51,7 @@ public class GenerateMaze extends MazeMaker {
                 start = new Node(0, x);
                 topNodes[x] = start;
                 count++;
-                FileHandler.INSTANCE.drawInMaze(image, x, 0, 0);
+                FileHandler.INSTANCE.drawInMaze(imageCopy, x, 0, 0);
             }
         }
 
@@ -113,7 +114,7 @@ public class GenerateMaze extends MazeMaker {
                         topNodes[x] = null;
 
                     count++;
-                    FileHandler.INSTANCE.drawInMaze(image, x, y, 0);
+                    FileHandler.INSTANCE.drawInMaze(imageCopy, x, y, 0);
                 }
             }
         }
@@ -124,12 +125,12 @@ public class GenerateMaze extends MazeMaker {
                 Node temp = topNodes[x];
                 temp.setNeighbors(2, end);
                 end.setNeighbors(0, temp);
-                FileHandler.INSTANCE.drawInMaze(image, x, end.getY(), 0);
+                FileHandler.INSTANCE.drawInMaze(imageCopy, x, end.getY(), 0);
                 count++;
                 break;
             }
         }
-        FileHandler.INSTANCE.saveImage(image, "mazeNode.png");
+        FileHandler.INSTANCE.saveImage(imageCopy, "mazeNode.png");
 
         return start;
     }
@@ -143,36 +144,24 @@ public class GenerateMaze extends MazeMaker {
         return nodes;
     };
 
+    @Override
     public int getWidth() {
         return width;
     }
 
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
+    @Override
     public int getHeight() {
         return height;
     }
 
-    public void setHeight(int height) {
-        this.height = height;
-    }
-
+    @Override
     public Node getStart() {
         return start;
     }
 
-    public void setStart(Node start) {
-        this.start = start;
-    }
-
+    @Override
     public Node getEnd() {
         return end;
-    }
-
-    public void setEnd(Node end) {
-        this.end = end;
     }
 
     public BufferedImage getImage() {
