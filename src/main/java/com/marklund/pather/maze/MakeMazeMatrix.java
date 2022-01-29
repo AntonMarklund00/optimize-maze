@@ -15,21 +15,36 @@ public class MakeMazeMatrix extends MazeMaker<Integer[][], Integer[]>{
 
     @Override
     public Integer[][] makeMaze(BufferedImage image) {
-        width = image.getWidth();
-        height = image.getHeight();
         this.image = image;
-        Integer[][] maze = new Integer[width][height];
-        for (int y = 0; y < width; y++) {
-            for (int x = 0; x < height; x++) {
-                if (y == 0 && ColorTester.INSTANCE.isWhite(new Color(image.getRGB(x,y)))){
+        setMazeSizeBasedOnImage(this.image);
+        Integer[][] maze = new Integer[height][width];
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                if (isStart(y, x)) {
                     start = new Integer[]{y,x};
-                }else if (y == height-1 && ColorTester.INSTANCE.isWhite(new Color(image.getRGB(x,y)))){
+                }
+
+                if (isEnd(y,x)){
                     end = new Integer[]{y,x};
                 }
+
                 maze[y][x] = (ColorTester.INSTANCE.isWhite(new Color(image.getRGB(x,y))))? 1 : 0;
             }
         }
         return maze;
+    }
+
+    private void setMazeSizeBasedOnImage(BufferedImage image) {
+        width = image.getWidth();
+        height = image.getHeight();
+    }
+
+    private boolean isStart(int y, int x) {
+       return (y == 0 && ColorTester.INSTANCE.isWhite(new Color(image.getRGB(x,y))));
+    }
+
+    private boolean isEnd(int y, int x) {
+        return (y == height-1 && ColorTester.INSTANCE.isWhite(new Color(image.getRGB(x,y))));
     }
 
     @Override
