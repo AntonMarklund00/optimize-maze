@@ -1,22 +1,27 @@
 package com.marklund.pather.maze;
 
 import com.marklund.pather.dao.Node;
-import com.marklund.pather.support.FileHandler;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
 import java.util.function.BiFunction;
 
 public class GenerateMaze extends MazeMaker<Node, Node>{
 
     private BufferedImage image;
+    private Node[] topNodes;
+    boolean[] rowData;
     private int width;
     private int height;
     private Node start;
     private Node end;
 
-    private boolean[] makeIntMatrix(BufferedImage image){
+    public GenerateMaze() {
+        topNodes = listOfNodesAtFirstLine.apply(width, 0);
+        rowData = makeBooleanArrayBasedOnImageColors(image);
+    }
+
+    private boolean[] makeBooleanArrayBasedOnImageColors(BufferedImage image){
         boolean[] matrix = new boolean[image.getHeight() * image.getWidth()];
         int counter = 0;
         for (int y = 0; y < image.getHeight(); y++) {
@@ -31,23 +36,9 @@ public class GenerateMaze extends MazeMaker<Node, Node>{
     @Override
     public Node makeMaze(BufferedImage image) {
         this.image = image;
+        setMazeSizeBasedOnImage(image);
 
-        width = image.getWidth();
-        height = image.getHeight();
-        boolean[] rowData = makeIntMatrix(image);
-
-        Node[] topNodes = listOfNodesAtFirstLine.apply(width, 0);
-
-        int count = 0;
-
-        for (int x = 1; x < width-1; x++) {
-            if (rowData[x]) {
-                start = new Node(0, x);
-                topNodes[x] = start;
-                count++;
-            }
-        }
-
+        findStartPosition();
 
         for(int y = 1; y < height-1; y++){
 
@@ -107,13 +98,30 @@ public class GenerateMaze extends MazeMaker<Node, Node>{
                     } else
                         topNodes[x] = null;
 
-                    count++;
                 }
             }
         }
 
+        findEndPosition();
 
+        return start;
+    }
 
+    private void setMazeSizeBasedOnImage(BufferedImage image) {
+        width = image.getWidth();
+        height = image.getHeight();
+    }
+
+    private void findStartPosition(){
+        for (int x = 1; x < width-1; x++) {
+            if (rowData[x]) {
+                start = new Node(0, x);
+                topNodes[x] = start;
+            }
+        }
+    }
+
+    private void findEndPosition(){
         int rowOffset = (height - 1) * width;
         for (int x = 0; x < width; x++) {
             if (rowData[rowOffset+x]) {
@@ -121,14 +129,10 @@ public class GenerateMaze extends MazeMaker<Node, Node>{
                 Node temp = topNodes[x];
                 temp.setNeighbors(2, end);
                 end.setNeighbors(0, temp);
-                count++;
                 break;
             }
         }
-
-        return start;
     }
-
 
     private BiFunction<Number, Number, Node[]> listOfNodesAtFirstLine = (number, row)-> {
         Node[] nodes = new Node[number.intValue()];
