@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 public abstract class MazeMaker <T, E>{
     protected final ColorTester colorTester = ColorTester.INSTANCE;
 
-    public abstract T makeMaze(BufferedImage image);
+    public abstract T makeMaze();
 
     public abstract E getStart();
     public abstract E getEnd();

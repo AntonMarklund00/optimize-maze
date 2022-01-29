@@ -16,8 +16,8 @@ public class GenerateMaze extends MazeMaker<Node, Node>{
     private Node start;
     private Node end;
 
-    public GenerateMaze() {
-        topNodes = listOfNodesAtFirstLine.apply(width, 0);
+    public GenerateMaze(BufferedImage image) {
+        this.image = image;
         rowData = makeBooleanArrayBasedOnImageColors(image);
     }
 
@@ -34,10 +34,9 @@ public class GenerateMaze extends MazeMaker<Node, Node>{
 
 
     @Override
-    public Node makeMaze(BufferedImage image) {
-        this.image = image;
+    public Node makeMaze() {
         setMazeSizeBasedOnImage(image);
-
+        topNodes = listOfNodesAtFirstLine.apply(width, 0);
         findStartPosition();
 
         for(int y = 1; y < height-1; y++){

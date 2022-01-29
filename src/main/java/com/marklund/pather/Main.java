@@ -13,24 +13,23 @@ import java.awt.image.BufferedImage;
 
 public class Main {
     public static void main(String[] args) {
-        GenerateMaze maze = new GenerateMaze();
-        FileHandler fileHandler = FileHandler.INSTANCE;
-
         String fileName = "super-big-maze.png";
+        FileHandler fileHandler = FileHandler.INSTANCE;
+        BufferedImage image = fileHandler.readImage(fileName);
+        GenerateMaze maze = new GenerateMaze(image);
 
         System.out.println("MAZE GENERATION");
 
         // Make a optimized maze
-        BufferedImage image = fileHandler.readImage(fileName);
         long startTimeMakeMaze = System.currentTimeMillis();
-        maze.makeMaze(image);
+        maze.makeMaze();
         long endTimeMakeMaze = System.currentTimeMillis();
         System.out.println("Time to make optimized maze: " + (endTimeMakeMaze - startTimeMakeMaze) + "ms");
 
         // Make a matrix of the maze
         long startTimeMakeMatrixMaze = System.currentTimeMillis();
-        MakeMazeMatrix matrixMaze = new MakeMazeMatrix();
-        Integer[][] matrix = matrixMaze.makeMaze(fileHandler.readImage(fileName));
+        MakeMazeMatrix matrixMaze = new MakeMazeMatrix(fileHandler.readImage(fileName));
+        Integer[][] matrix = matrixMaze.makeMaze();
         long endTimeMakeMatrixMaze = System.currentTimeMillis();
         System.out.println("Time to make matrix maze: " + (endTimeMakeMatrixMaze - startTimeMakeMatrixMaze) + "ms");
 

@@ -13,9 +13,12 @@ public class MakeMazeMatrix extends MazeMaker<Integer[][], Integer[]>{
     private Integer[] start;
     private Integer[] end;
 
-    @Override
-    public Integer[][] makeMaze(BufferedImage image) {
+    public MakeMazeMatrix(BufferedImage image) {
         this.image = image;
+    }
+
+    @Override
+    public Integer[][] makeMaze() {
         setMazeSizeBasedOnImage(this.image);
         Integer[][] maze = new Integer[height][width];
         for (int y = 0; y < height; y++) {
