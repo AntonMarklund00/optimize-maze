@@ -6,3 +6,6 @@
 
 ## Maze solution
 <img src="_Resources/assets/solution.png">
+
+## Example results
+<img src="_Resources/assets/exampleResult.png">
