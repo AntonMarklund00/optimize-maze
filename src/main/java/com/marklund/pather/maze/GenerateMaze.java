@@ -35,10 +35,34 @@ public class GenerateMaze extends MazeMaker<Node, Node>{
 
     @Override
     public Node makeMaze() {
-        setMazeSizeBasedOnImage(image);
+        setMazeSizeBasedOnImageSize(image);
         topNodes = listOfNodesAtFirstLine.apply(width, 0);
-        findStartPosition();
 
+        findStartPosition();
+        generateGraphFromMazeImage();
+        findEndPosition();
+
+        return start;
+    }
+
+    private BiFunction<Number, Number, Node[]> listOfNodesAtFirstLine = (number, row)-> {
+        Node[] nodes = new Node[number.intValue()];
+        for (int i = 0; i < number.intValue(); i++) {
+            nodes[i] = new Node(row.intValue(),i);
+        }
+        return nodes;
+    };
+
+    private void findStartPosition(){
+        for (int x = 1; x < width-1; x++) {
+            if (rowData[x]) {
+                start = new Node(0, x);
+                topNodes[x] = start;
+            }
+        }
+    }
+
+    private void generateGraphFromMazeImage() {
         for(int y = 1; y < height-1; y++){
 
             int rowOffset = y * width;
@@ -56,68 +80,63 @@ public class GenerateMaze extends MazeMaker<Node, Node>{
                 currentNode = next;
                 next = rowData[rowOffset+x+1];
 
-                Node node = null;
+                Node newNode = null;
 
                 if (!currentNode)
                     continue;
 
-                if (prevNode){
-                    if (next){
-                        if (rowData[rowAboveOffset+x] || rowData[rowBelowOffset+x]){
-                            node = new Node(y, x);
-                            leftNode.setNeighbors(1, node);
-                            node.setNeighbors(3, leftNode);
-                            leftNode = node;
+                if (prevNode){ // Previous node was a path
+                    if (next){ // If next node is path
+                        if (isPathAboveOrBelow(rowAboveOffset+x, rowBelowOffset+x)){
+                            newNode = new Node(y, x);
+                            leftNode.setNeighbors(1, newNode);
+                            newNode.setNeighbors(3, leftNode);
+                            leftNode = newNode;
                         }
-                    }else{
-                        node = new Node(y, x);
-                        leftNode.setNeighbors(1, node);
-                        node.setNeighbors(3, leftNode);
+                    }else{ // if next node is wall (current node is end of corridor)
+                        newNode = new Node(y, x);
+                        leftNode.setNeighbors(1, newNode);
+                        newNode.setNeighbors(3, leftNode);
                         leftNode = null;
                     }
                 }else{
-                    if (next){
-                        node = new Node(y, x);
-                        leftNode = node;
-                    }else{
-                        if (!rowData[rowAboveOffset+x] || !rowData[rowBelowOffset+x]){
-                            node = new Node(y, x);
+                    if (next){ // if next node is path
+                        newNode = new Node(y, x);
+                        leftNode = newNode;
+                    }else {
+                        if(isNotPathAboveOrBelow(rowAboveOffset+x, rowBelowOffset+x)){
+                            newNode = new Node(y, x);
                         }
                     }
                 }
 
-                if (node != null){
-                    if (rowData[rowAboveOffset+x]){
+                if (newNode != null){
+                    if (rowData[rowAboveOffset+x]){ // Clear above
                         Node temp = topNodes[x];
-                        temp.setNeighbors(2, node);
-                        node.setNeighbors(0, temp);
+                        temp.setNeighbors(2, newNode);
+                        newNode.setNeighbors(0, temp);
                     }
-                    if (rowData[rowBelowOffset+x]){
-                        topNodes[x] = node;
+
+                    if (rowData[rowBelowOffset+x]){ // Clear below
+                        topNodes[x] = newNode;
                     } else
                         topNodes[x] = null;
-
                 }
             }
         }
-
-        findEndPosition();
-
-        return start;
     }
 
-    private void setMazeSizeBasedOnImage(BufferedImage image) {
+    private boolean isPathAboveOrBelow(int rowAboveOffset, int rowBelowOffset) {
+        return rowData[rowAboveOffset] || rowData[rowBelowOffset];
+    }
+
+    private boolean isNotPathAboveOrBelow(int rowAboveOffset, int rowBelowOffset) {
+        return !rowData[rowAboveOffset] || !rowData[rowBelowOffset];
+    }
+
+    private void setMazeSizeBasedOnImageSize(BufferedImage image) {
         width = image.getWidth();
         height = image.getHeight();
-    }
-
-    private void findStartPosition(){
-        for (int x = 1; x < width-1; x++) {
-            if (rowData[x]) {
-                start = new Node(0, x);
-                topNodes[x] = start;
-            }
-        }
     }
 
     private void findEndPosition(){
@@ -132,14 +151,6 @@ public class GenerateMaze extends MazeMaker<Node, Node>{
             }
         }
     }
-
-    private BiFunction<Number, Number, Node[]> listOfNodesAtFirstLine = (number, row)-> {
-        Node[] nodes = new Node[number.intValue()];
-        for (int i = 0; i < number.intValue(); i++) {
-            nodes[i] = new Node(row.intValue(),i);
-        }
-        return nodes;
-    };
 
     @Override
     public int getWidth() {
